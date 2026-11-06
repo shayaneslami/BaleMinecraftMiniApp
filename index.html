@@ -1,305 +1,209 @@
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#111318">
-<title>جستجوی اسکین ماینکرفت</title>
-
-<script src="https://cdn.jsdelivr.net/npm/skinview3d@3.4.2/bundles/skinview3d.bundle.js"></script>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>جست‌وجوی اسکین ماینکرافت</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box}
 body{
- margin:0;background:#111318;color:#fff;
- font-family:Tahoma,Arial,sans-serif;min-height:100vh
+ margin:0;background:#10151d;color:#fff;
+ font-family:Tahoma,Arial,sans-serif;
+ min-height:100vh;display:flex;justify-content:center;
+ align-items:center;padding:18px
 }
-.container{max-width:450px;margin:auto;padding:25px 18px}
-.header{text-align:center;margin-top:65px;margin-bottom:35px}
-.logo{font-size:55px}
-h1{font-size:23px;margin:15px 0}
-.subtitle{font-size:13px;color:#929baa;line-height:2}
-.panel{
- background:#1c222c;border:1px solid #303a49;
- border-radius:18px;padding:20px
+.container{
+ width:100%;max-width:440px;background:#1b2430;
+ border:1px solid #303e50;border-radius:22px;
+ padding:24px;text-align:center
 }
-label{display:block;font-size:14px;margin-bottom:12px}
+h2{margin:4px 0 12px}
+.description{color:#aebdce;font-size:13px;line-height:2}
 input{
- width:100%;height:54px;border-radius:12px;
- border:1px solid #424e60;background:#111720;
- color:white;padding:12px 15px;font-size:17px;
- direction:ltr;text-align:left;outline:none
+ width:100%;padding:15px;border-radius:12px;
+ border:1px solid #46576b;background:#101923;
+ color:white;font-size:16px;text-align:center;
+ outline:none;margin:15px 0
 }
-input:focus{border-color:#339bfa}
 button{
- width:100%;height:53px;border:0;border-radius:12px;
- font-size:15px;font-weight:bold;margin-top:13px;
- cursor:pointer
+ width:100%;padding:14px;border:0;border-radius:12px;
+ background:#39a96b;color:white;font-size:15px;
+ font-weight:bold;margin-top:10px;cursor:pointer
 }
-.primary{background:#2388ed;color:white}
-.secondary{background:#303947;color:white}
-.status{
- text-align:center;font-size:14px;
- line-height:2;margin-top:22px;min-height:30px
-}
-.success{color:#37d58a}
-.error{color:#ff6565}
+button:disabled{opacity:.5}
+.secondary{background:#344458}
 .hidden{display:none!important}
-.actions{display:flex;gap:10px;margin-top:25px}
-.actions button{flex:1}
-.preview{
- height:min(68vh,540px);background:#171d27;
- border:1px solid #303947;border-radius:18px;
- margin:20px 0;overflow:hidden
+.status{font-size:13px;color:#b8c8d9;margin:14px 0;line-height:2}
+.error{color:#ff7777}
+canvas{
+ width:100%;height:330px;display:block;
+ background:#111a25;border-radius:15px;margin-top:14px
 }
-canvas{width:100%;height:100%;display:block}
-.viewer{max-width:600px}
-.viewer .header{margin-top:25px;margin-bottom:20px}
-.viewer-info{text-align:center;color:#aeb7c6;font-size:12px;line-height:2}
-.footer{text-align:center;color:#697386;font-size:11px;margin-top:35px}
+.footer{font-size:11px;color:#7f91a5;margin-top:22px}
 </style>
 </head>
-
 <body>
-<div class="container" id="searchPage">
-
- <div class="header">
-  <div class="logo">🎮</div>
-  <h1>جستجوی اسکین ماینکرفت</h1>
-  <div class="subtitle">
-   نام کاربری بازیکن ماینکرفت را وارد کن
-   <br>
-   تا اسکین او را برایت پیدا کنیم.
+<div class="container">
+ <div id="searchPanel">
+  <h2>🎮 جست‌وجوی اسکین</h2>
+  <div class="description">
+   نام کاربری ماینکرافت را وارد کن تا اسکین بازیکن را پیدا کنیم.
   </div>
- </div>
-
- <div class="panel" id="searchPanel">
-  <label for="username">نام کاربری بازیکن</label>
   <input id="username" maxlength="16"
-   placeholder="Username"
-   autocomplete="off" spellcheck="false">
-
-  <button class="primary" id="searchButton">
-   🔎 جستجوی اسکین
+   placeholder="Minecraft Username"
+   autocomplete="off">
+  <button id="searchButton" onclick="searchSkin()">
+   🔎 جست‌وجوی اسکین
   </button>
-
   <div id="status" class="status"></div>
  </div>
 
- <div id="resultPanel" class="panel hidden">
-  <div style="text-align:center;font-size:43px">✅</div>
-  <div id="resultMessage" class="status success">
-   گزارش اسکین در ربات ارسال شد!
+ <div id="resultPanel" class="hidden">
+  <h2 id="playerTitle">اسکین بازیکن</h2>
+  <div class="description" id="resultMessage">
+   اسکین پیدا شد!
   </div>
-
-  <div class="actions">
-   <button class="secondary" id="backButton">
-    ↩ بازگشت
-   </button>
-   <button class="primary" id="newButton">
-    🔎 جستجوی جدید
-   </button>
-  </div>
- </div>
-
- <div class="footer">Shayan Minecraft Skin</div>
-</div>
-
-<div class="container viewer hidden" id="viewerPage">
- <div class="header">
-  <div class="logo">🧊</div>
-  <h1>نمایش سه‌بعدی اسکین</h1>
-  <div id="viewerUsername" class="subtitle"></div>
- </div>
-
- <div class="preview">
   <canvas id="skinCanvas"></canvas>
+  <button class="secondary" onclick="resetCamera()">
+   🎯 تنظیم دوباره دوربین
+  </button>
+  <button class="secondary" onclick="newSearch()">
+   🔎 جست‌وجوی جدید
+  </button>
+  <button onclick="closeApp()">
+   بازگشت
+  </button>
  </div>
-
- <div class="viewer-info">
-  با لمس و کشیدن، بازیکن را از تمام جهت‌ها ببین.
-  <br>
-  برای بزرگ‌نمایی از زوم استفاده کن.
- </div>
-
- <button class="secondary" id="resetButton">
-  🎯 تنظیم دوباره دوربین
- </button>
-
  <div class="footer">Shayan Minecraft 3D Viewer</div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/skinview3d@3.2.0/bundles/skinview3d.bundle.js"></script>
 <script>
-const params = new URLSearchParams(location.search);
-
-const SITE =
- "https://shayaneslami.github.io/BaleMinecraftMiniApp/";
-
-const STEVE =
- "https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/1.21.4/assets/minecraft/textures/entity/player/wide/steve.png";
-
-const ELY =
- "https://skinsystem.ely.by/skins/";
-
-const token = params.get("token") || "";
-const apiBase = (params.get("api") || "").replace(/\/+$/, "");
-
+const API = "https://api.mcskin.me";
 const $ = id => document.getElementById(id);
 
-let busy = false;
 let viewer = null;
+let busy = false;
 
 function validName(name){
- return /^[a-zA-Z0-9_]{1,16}$/.test(name);
+ return /^[a-zA-Z0-9_]{3,16}$/.test(name);
 }
 
-function setStatus(message,type=""){
+function status(message,error=false){
  $("status").textContent=message;
- $("status").className="status "+type;
+ $("status").className="status"+(error?" error":"");
 }
 
-function showResult(){
- $("searchPanel").classList.add("hidden");
- $("resultPanel").classList.remove("hidden");
- $("resultMessage").textContent=
-  "گزارش اسکین در ربات ارسال شد!";
-}
-
-function showSearch(){
- $("resultPanel").classList.add("hidden");
- $("searchPanel").classList.remove("hidden");
- $("username").value="";
- setStatus("");
-}
-
-async function searchSkin(){
- if(busy)return;
-
- const username=$("username").value.trim();
-
+async function loadPlayer(username){
  if(!validName(username)){
-  setStatus("نام کاربری معتبر نیست.","error");
+  status("نام کاربری معتبر نیست.",true);
   return;
  }
 
- if(!token || !apiBase.startsWith("https://")){
-  setStatus("ارتباط با ربات برقرار نیست. دوباره /start بزن.","error");
-  return;
- }
-
+ if(busy)return;
  busy=true;
  $("searchButton").disabled=true;
- $("searchButton").textContent="در حال جستجو...";
- setStatus("در حال جستجوی اسکین و ارسال به ربات...");
+ $("searchButton").textContent="در حال جست‌وجو...";
+ status("در حال دریافت اسکین...");
 
  try{
-  const response=await fetch(apiBase+"/api/search",{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({
-    token:token,
-    username:username
-   })
-  });
+  const url=API+"/skin/"+encodeURIComponent(username);
+  const response=await fetch(url);
 
-  const result=await response.json();
-
-  if(!response.ok || !result.ok){
-   throw new Error(result.message || "ارسال ناموفق بود.");
+  if(!response.ok){
+   if(response.status===404)
+    throw new Error("این بازیکن در سرویس اسکین پیدا نشد.");
+   throw new Error("دریافت اسکین ناموفق بود. دوباره امتحان کن.");
   }
 
-  showResult();
+  const type=response.headers.get("content-type")||"";
+  if(!type.includes("image"))
+   throw new Error("پاسخ سرویس تصویر معتبر نیست.");
 
- }catch(error){
-  setStatus("❌ "+error.message,"error");
- }finally{
-  busy=false;
-  $("searchButton").disabled=false;
-  $("searchButton").textContent="🔎 جستجوی اسکین";
- }
-}
+  const blob=await response.blob();
+  const imageUrl=URL.createObjectURL(blob);
 
-async function startViewer(){
- const username=params.get("player") || "Steve";
+  $("searchPanel").classList.add("hidden");
+  $("resultPanel").classList.remove("hidden");
+  $("playerTitle").textContent=username;
+  $("resultMessage").textContent="اسکین بازیکن پیدا شد!";
 
- $("searchPage").classList.add("hidden");
- $("viewerPage").classList.remove("hidden");
- $("viewerUsername").textContent=username;
+  if(viewer){
+   viewer.dispose();
+   viewer=null;
+  }
 
- if(!window.skinview3d){
-  $("viewerUsername").textContent="کتابخانه سه‌بعدی بارگذاری نشد.";
-  return;
- }
-
- try{
-  viewer=new skinview3d.SkinViewer({
+  viewer=skinview3d.createViewer({
    canvas:$("skinCanvas"),
-   width:550,
-   height:540,
-   background:"#171d27"
+   width:360,
+   height:330,
+   skin:imageUrl,
+   zoom:0.8,
+   background:"#111a25"
   });
 
   viewer.controls.enableRotate=true;
   viewer.controls.enableZoom=true;
-  viewer.controls.enablePan=true;
-  viewer.zoom=0.85;
+  viewer.controls.enablePan=false;
 
-  let loaded=false;
-
-  if(validName(username)){
-   try{
-    await viewer.loadSkin(
-     ELY+encodeURIComponent(username)+".png"
-    );
-    loaded=true;
-   }catch(e){
-    console.log("Real skin unavailable; loading Steve.");
-   }
+  if(viewer.loadSkin){
+   await viewer.loadSkin(imageUrl);
   }
 
-  if(!loaded){
-   await viewer.loadSkin(STEVE);
-  }
-
-  viewer.animation=new skinview3d.IdleAnimation();
+  history.replaceState({}, "", "?view=3d&player="+encodeURIComponent(username));
 
  }catch(error){
-  console.error(error);
-  $("viewerUsername").textContent="بارگذاری اسکین ممکن نشد.";
+  status("❌ "+error.message,true);
+ }finally{
+  busy=false;
+  $("searchButton").disabled=false;
+  $("searchButton").textContent="🔎 جست‌وجوی اسکین";
  }
 }
 
-$("searchButton").addEventListener("click",searchSkin);
+function searchSkin(){
+ loadPlayer($("username").value.trim());
+}
 
-$("username").addEventListener("keydown",event=>{
- if(event.key==="Enter")searchSkin();
-});
+function newSearch(){
+ if(viewer){
+  viewer.dispose();
+  viewer=null;
+ }
+ $("resultPanel").classList.add("hidden");
+ $("searchPanel").classList.remove("hidden");
+ $("username").value="";
+ status("");
+ history.replaceState({}, "", location.pathname);
+}
 
-$("newButton").addEventListener("click",showSearch);
+function resetCamera(){
+ if(viewer && viewer.controls){
+  viewer.controls.reset();
+ }
+}
 
-$("backButton").addEventListener("click",()=>{
- if(window.Bale && window.Bale.WebApp &&
-    typeof window.Bale.WebApp.close==="function"){
+function closeApp(){
+ if(window.Bale?.WebApp?.close){
   window.Bale.WebApp.close();
- }else if(window.Telegram && window.Telegram.WebApp){
+ }else if(window.Telegram?.WebApp?.close){
   window.Telegram.WebApp.close();
  }else{
   history.back();
  }
+}
+
+$("username").addEventListener("keydown",e=>{
+ if(e.key==="Enter")searchSkin();
 });
 
-$("resetButton").addEventListener("click",()=>{
- if(viewer)viewer.resetCameraPose();
-});
+const params=new URLSearchParams(location.search);
+const player=params.get("player");
 
-history.pushState({stay:true},"",location.href);
-
-window.addEventListener("popstate",()=>{
- history.pushState({stay:true},"",location.href);
-});
-
-if(params.get("view")==="3d"){
- startViewer();
+if(params.get("view")==="3d" && player){
+ $("username").value=player;
+ loadPlayer(player);
 }
 </script>
 </body>

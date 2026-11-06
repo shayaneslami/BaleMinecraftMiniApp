@@ -1,87 +1,104 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#10151d">
-<title>ماین‌اسکن | وضعیت سرور ماینکرفت</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مینی‌اپ ماینکرفت</title>
+<script src="https://tapi.bale.ai/miniapp.js?3"></script>
 <style>
-:root{color-scheme:dark;--bg:#0b1017;--panel:#151e29;--line:#263648;--green:#62e6a5;--muted:#9aabba;--red:#ff7777}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1b3544 0,transparent 55%),var(--bg);color:#f3f7fb;font-family:Tahoma,Arial,sans-serif;min-height:100vh}
-main{width:min(760px,92%);margin:38px auto}.brand{text-align:center;margin-bottom:24px}.logo{font-size:42px}.brand h1{margin:8px 0 5px;font-size:27px}.brand p,.muted{color:var(--muted);font-size:13px}
-.card{background:linear-gradient(145deg,#182431,#111923);border:1px solid var(--line);border-radius:22px;padding:22px;margin:16px 0;box-shadow:0 16px 45px #0004}
-.profile{display:flex;align-items:center;gap:15px}.avatar{width:66px;height:66px;border-radius:50%;object-fit:cover;background:#263747;border:2px solid #3b5968}.profile h2{font-size:18px;margin:0 0 6px}.profile p{margin:3px 0;color:var(--muted);font-size:13px;direction:ltr;text-align:right}
-input{width:100%;background:#0b131c;border:1px solid #34485b;border-radius:13px;padding:15px;color:white;font-size:16px;outline:none}input:focus{border-color:var(--green)}
-button{border:0;border-radius:13px;background:var(--green);color:#092017;font-weight:bold;font-size:15px;padding:14px 20px;cursor:pointer}button:disabled{opacity:.6;cursor:wait}.search{display:flex;gap:10px;margin-top:12px}.search button{white-space:nowrap}
-.status{margin-top:16px;color:var(--muted);font-size:13px}.server-head{display:flex;align-items:center;gap:14px}.server-icon{width:72px;height:72px;border-radius:15px;background:#0b131c;object-fit:cover}.server-head h2{margin:0 0 8px;font-size:19px;overflow-wrap:anywhere}.pill{display:inline-block;border-radius:20px;padding:5px 11px;background:#243a35;color:var(--green);font-size:12px}.pill.off{background:#3b2529;color:var(--red)}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}.stat{background:#0d151e;border:1px solid #243343;border-radius:14px;padding:13px}.stat small{display:block;color:var(--muted);margin-bottom:7px}.stat strong{font-size:17px;overflow-wrap:anywhere}.motd{white-space:pre-wrap;line-height:1.8;color:#d5e1eb;margin-top:16px;font-size:13px}
-footer{text-align:center;color:#718394;font-size:11px;margin:28px 0}@media(max-width:480px){main{margin:22px auto}.search{flex-direction:column}.grid{gap:8px}.card{padding:17px}}
-</style></head>
-<body><main>
-<header class="brand"><div class="logo">⛏️</div><h1>ماین‌اسکن</h1><p>پروفایل بله و وضعیت زنده سرورهای Minecraft</p></header>
-<section class="card profile">
-<img id="avatar" class="avatar" alt="تصویر پروفایل" src="https://placehold.co/100x100/263747/ffffff?text=MC">
-<div><h2 id="name">کاربر بله</h2><p id="username">@username</p><p id="uid">شناسه: —</p></div>
-</section>
-<section class="card">
-<h2 style="margin-top:0">🔎 بررسی سرور</h2><p class="muted">آدرس سرور جاوا یا بدراک را وارد کن؛ مثل play.example.com</p>
-<div class="search"><input id="address" autocomplete="url" placeholder="آدرس سرور یا IP"><button id="searchBtn">بررسی سرور</button></div>
-<div id="status" class="status">آماده جست‌وجو هستیم.</div>
-</section>
-<section id="result" class="card" hidden>
-<div class="server-head"><img id="serverIcon" class="server-icon" alt="آیکن سرور"><div><h2 id="serverAddress">—</h2><span id="online" class="pill">—</span></div></div>
-<div class="grid">
-<div class="stat"><small>بازیکنان آنلاین</small><strong id="players">—</strong></div>
-<div class="stat"><small>نسخه</small><strong id="version">—</strong></div>
-<div class="stat"><small>پورت</small><strong id="port">—</strong></div>
-<div class="stat"><small>نوع نرم‌افزار</small><strong id="software">—</strong></div>
-</div><div id="motd" class="motd"></div>
-</section>
-<footer>اطلاعات سرور از سرویس وضعیت Minecraft دریافت می‌شود.</footer>
-</main>
+*{box-sizing:border-box}
+body{margin:0;background:#101810;color:#fff;font-family:Tahoma,Arial,sans-serif;padding:20px}
+.container{max-width:480px;margin:25px auto;background:#1c291c;border:1px solid #38543a;border-radius:20px;padding:22px;box-shadow:0 12px 35px #0008}
+h2{text-align:center;color:#75df75;margin-top:5px}
+.profile{display:flex;align-items:center;gap:12px;background:#293b29;padding:12px;border-radius:14px;margin-bottom:22px}
+.profile img{width:55px;height:55px;border-radius:50%;object-fit:cover;background:#435943}
+.profile-info{min-width:0}
+.profile-info div{margin:5px 0;overflow-wrap:anywhere}
+label{display:block;margin:15px 0 8px;color:#b8d9b8}
+input,select{width:100%;padding:14px;border:1px solid #476647;border-radius:11px;background:#101b10;color:white;font-size:15px;outline:none}
+button{width:100%;border:0;border-radius:12px;padding:15px;margin-top:20px;background:#4caf50;color:white;font-size:16px;font-weight:bold}
+button:disabled{opacity:.6}
+.note{text-align:center;color:#a9b9a9;font-size:12px;margin-top:16px;line-height:2}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>⛏️ جست‌وجوی سرور ماینکرفت</h2>
+
+<div class="profile">
+<img id="avatar" alt="عکس پروفایل">
+<div class="profile-info">
+<div id="name">در حال دریافت پروفایل...</div>
+<div id="username"></div>
+<div id="userid"></div>
+</div>
+</div>
+
+<label for="address">آدرس سرور</label>
+<input id="address" type="text" placeholder="مثلاً play.example.com" maxlength="255">
+
+<label for="edition">نوع سرور</label>
+<select id="edition">
+<option value="java">Minecraft Java</option>
+<option value="bedrock">Minecraft Bedrock</option>
+</select>
+
+<button id="search">🔎 بررسی سرور و ارسال گزارش در بله</button>
+<div class="note">پس از جست‌وجو، مینی‌اپ بسته می‌شود و گزارش سرور در همین گفت‌وگوی بات ارسال خواهد شد.</div>
+</div>
+
 <script>
-const $=id=>document.getElementById(id);
-function getBaleUser(){
-  // Bale Mini App clients may expose the launch data through the WebApp bridge.
-  const candidates=[window.Bale?.WebApp,window.Bale,window.BaleApp,window.Telegram?.WebApp];
-  for(const app of candidates){if(app?.initDataUnsafe?.user)return app.initDataUnsafe.user;}
-  try{
-    const raw=new URLSearchParams(location.search).get("user");
-    if(raw)return JSON.parse(decodeURIComponent(raw));
-  }catch(e){}
-  return null;
+const app = window.Bale && window.Bale.WebApp ? window.Bale.WebApp : null;
+
+function showProfile(){
+    if(!app) {
+        document.getElementById("name").textContent="برای استفاده، از داخل بات بله وارد شوید.";
+        return;
+    }
+
+    const user = app.initDataUnsafe && app.initDataUnsafe.user;
+    if(!user) {
+        document.getElementById("name").textContent="اطلاعات پروفایل در دسترس نیست.";
+        return;
+    }
+
+    const fullName = [user.first_name,user.last_name].filter(Boolean).join(" ");
+    document.getElementById("name").textContent=fullName || "کاربر بله";
+    document.getElementById("username").textContent=user.username ? "@"+user.username : "نام کاربری ثبت نشده";
+    document.getElementById("userid").textContent="شناسه: "+user.id;
+
+    if(user.photo_url) {
+        document.getElementById("avatar").src=user.photo_url;
+    }
 }
-function showUser(u){
-  if(!u)return;
-  const name=[u.first_name,u.last_name].filter(Boolean).join(" ")||"کاربر بله";
-  $("name").textContent=name;
-  $("username").textContent=u.username?"@"+u.username:"نام کاربری ثبت نشده";
-  $("uid").textContent="شناسه: "+(u.id??u.user_id??"—");
-  if(u.photo_url||u.photoUrl)$("avatar").src=u.photo_url||u.photoUrl;
-}
-showUser(getBaleUser());
-async function checkServer(){
-  const address=$("address").value.trim();
-  if(!address){$("status").textContent="اول آدرس سرور را وارد کن.";return;}
-  $("searchBtn").disabled=true;$("status").textContent="در حال دریافت اطلاعات سرور…";$("result").hidden=true;
-  try{
-    const clean=address.replace(/^https?:\/\//,"").split("/")[0];
-    const response=await fetch("https://api.mcsrvstat.us/3/"+encodeURIComponent(clean),{cache:"no-store"});
-    if(!response.ok)throw new Error("پاسخ مناسبی از سرویس دریافت نشد.");
-    const d=await response.json();
-    $("result").hidden=false;
-    $("serverAddress").textContent=d.hostname||d.ip||clean;
-    $("online").textContent=d.online?"آنلاین":"آفلاین";
-    $("online").className="pill"+(d.online?"":" off");
-    $("players").textContent=d.online?(d.players?.online??0)+" / "+(d.players?.max??"?"):"—";
-    $("version").textContent=d.version||"نامشخص";
-    $("port").textContent=d.port||"—";
-    $("software").textContent=d.software||d.protocol?.name||"نامشخص";
-    $("motd").textContent=(d.motd?.clean||d.motd?.raw||[]).join("\n")||"توضیحی برای سرور اعلام نشده است.";
-    $("serverIcon").src=d.icon||"https://placehold.co/100x100/263747/ffffff?text=MC";
-    $("status").textContent=d.online?"اطلاعات سرور دریافت شد.":"سرور پاسخ می‌دهد اما در حال حاضر آفلاین گزارش شده است.";
-  }catch(err){$("status").textContent="خطا در دریافت اطلاعات: "+err.message+" (ممکن است سرویس یا CORS موقتاً در دسترس نباشد.)";}
-  finally{$("searchBtn").disabled=false;}
-}
-$("searchBtn").addEventListener("click",checkServer);
-$("address").addEventListener("keydown",e=>{if(e.key==="Enter")checkServer();});
-</script></body></html>
+
+document.getElementById("search").addEventListener("click",()=>{
+    const address=document.getElementById("address").value.trim();
+    const edition=document.getElementById("edition").value;
+    const button=document.getElementById("search");
+
+    if(!address){
+        alert("لطفاً آدرس سرور را وارد کن.");
+        return;
+    }
+
+    if(!app || typeof app.sendData!=="function"){
+        alert("این صفحه را از طریق دکمه مینی‌اپ در بات بله باز کن.");
+        return;
+    }
+
+    button.disabled=true;
+    button.textContent="در حال ارسال درخواست...";
+
+    app.sendData(JSON.stringify({
+        type:"server_lookup",
+        address:address,
+        edition:edition
+    }));
+});
+
+if(app && typeof app.ready==="function") app.ready();
+showProfile();
+</script>
+</body>
+</html>
